@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface PlaceService {
     List<PlaceDto> getPlacesByCoordinates(FrontendDto frontendDto);
+
 }
