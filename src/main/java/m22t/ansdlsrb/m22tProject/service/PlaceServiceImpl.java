@@ -20,7 +20,6 @@ public class PlaceServiceImpl implements PlaceService{
     }
     @Override
     public List<PlaceDto> getPlacesByCoordinates(FrontendDto frontendDto) {
-
         double minX = frontendDto.getX() - 0.005;
         double maxX = frontendDto.getX() + 0.005;
         double minY = frontendDto.getY() - 0.005;

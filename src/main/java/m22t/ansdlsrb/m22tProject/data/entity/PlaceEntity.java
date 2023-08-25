@@ -15,7 +15,7 @@ public class PlaceEntity {
     @Id
     private Long id;
     private int type;
-    private String location;
+    private String location; // 지역구 이름
     private String name;
     private String address;
     @Column(name="road_address")
@@ -26,5 +26,6 @@ public class PlaceEntity {
     private double y;
     @Column(name="imgurl")
     private String imgUrl;
+
 
 }

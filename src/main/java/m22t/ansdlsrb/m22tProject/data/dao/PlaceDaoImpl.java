@@ -15,9 +15,9 @@ public class PlaceDaoImpl implements PlaceDao{
     }
     @Override
     public List<PlaceEntity> getPlacesByCoordinates(double minX, double maxX, double minY, double maxY, int type) {
-        if(type==0)
+        if(type==0) // 타입이 0인 경우 == 모든 장소 카테고리 선택
             return placeRepository.getAllPlacesByXBetweenAndYBetween(minX, maxX, minY, maxY);
-        else
+        else // 카페, 공공회의실, 공공회의실 타입 선택
             return placeRepository.getPlacesByXBetweenAndYBetweenAndType(minX, maxX, minY, maxY, type);
     }
 }
