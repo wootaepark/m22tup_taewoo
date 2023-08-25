@@ -3,12 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* .flex-container 클래스에 추가한 스타일 */
+        .flex-container {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px;
+        }
+
+        .place-item {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 10px;
+            width: 40%;
+            text-align: center;
+          }
+    </style>
+
     <title>M22T UP</title>
 </head>
 <body>
+<div style="text-align:center; margin-bottom:20px;">
 <h1>M22T UP</h1>
 <h3>지도에 마크를 찍고 좌표를 입력하세요!!!</h3>
-<div>
+
     <form id="searchForm">
         <label for="type">Type:</label>
         <input type="radio" id="type0" name="type" value="0" required>
@@ -28,17 +46,28 @@
         <input type="number" id="x" name="x" step="any" value="127.2582" required><br><br>
 
         <input type="submit" value="조회하기">
+
     </form>
 </div>
 
 
-
-<div id="map" style="width:500px;height:400px;"></div>
+<div id="map-container" style="display: flex; justify-content: center; align-items: center; width: 100%;">
+    <div id="map" style="width: 500px; height: 400px;"></div>
+</div>
+<br>
+<hr>
+<br>
 <div id="results">
     <!-- 검색 결과가 여기에 표시될 예정 -->
 </div>
+<br>
 
-<div>
+<div style="text-align:center;">
+    <hr>
+    <div>
+        <h3> 예약 하기 </h3>
+    </div>
+    <br>
 
     <form id="reserveForm">
         <label for="user_name">예약자 이름:</label>
@@ -63,7 +92,6 @@
     </form>
 
     <p id="resultMessage"></p>
-
 
 
 </div>
@@ -95,8 +123,13 @@
             const resultsDiv = document.getElementById("results");
             resultsDiv.innerHTML = ""; // 기존 결과 지우기
 
+            const flexContainer = document.createElement("div");
+            flexContainer.classList.add("flex-container");
+
             data.forEach(place => {
                 const placeDiv = document.createElement("div");
+                placeDiv.classList.add("place-item");
+
                 placeDiv.innerHTML = `
                     <p>ID: ${place.id}</p>
                     <p>Type: ${place.type}</p>
@@ -105,14 +138,18 @@
                     <p>Address: ${place.address}</p>
                     <p>Road Address: ${place.roadAddress}</p>
                     <p>Phone: ${place.phone}</p>
-                    <p>URL: ${place.url}</p>
+                    <p>URL: <a href="https://${place.url}" target="_blank">${place.url}</a></p>
                     <p>X: ${place.x}</p>
                     <p>Y: ${place.y}</p>
                     <p>Image URL: ${place.imgUrl}</p>
-                    <hr>
+
                 `;
-                resultsDiv.appendChild(placeDiv);
+
+
+                flexContainer.appendChild(placeDiv);
             });
+
+            resultsDiv.appendChild(flexContainer);
         })
         .catch(error => console.error("Error:", error));
     });
