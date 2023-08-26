@@ -24,7 +24,7 @@
 </head>
 <body>
 <div style="text-align:center; margin-bottom:20px;">
-<h1>M22T UP</h1>
+    <font color="orange" size="50px">M22T UP</font>
 <h3>지도에 마크를 찍고 좌표를 입력하세요!!!</h3>
 
     <form id="searchForm">
@@ -57,6 +57,9 @@
 <br>
 <hr>
 <br>
+<div>
+    <h2 style="text-align:center;margin-top:0px;margin-bottom:20px;">범위내 목록</h2>
+</div>
 <div id="results">
     <!-- 검색 결과가 여기에 표시될 예정 -->
 </div>
@@ -96,9 +99,33 @@
 
 </div>
 
+<hr>
+<div style="text-align:center;">
+    <h3>조회 하기</h3>
+
+    <form id="inquireForm">
+        <label for="user_name_inquire">예약자 이름:</label>
+        <input type="text" id="user_name_inquire" name="user_name_inquire" required><br><br>
+
+        <label for="user_phone_number_inquire">예약자 전화번호:</label>
+        <input type="text" id="user_phone_number_inquire" name="user_phone_number_inquire" required><br><br>
+
+
+
+        <input type="submit" value="조회 하기">
+    </form>
+
+    <div id="reservationResults"></div>
+
+
+</div>
+
 <script type="text/javascript"
         src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=d7be0dab6870b8fb60794854999fc401"></script>
 <script>
+
+
+
     document.getElementById("searchForm").addEventListener("submit", function(event) {
         event.preventDefault();
 
@@ -126,6 +153,7 @@
             const flexContainer = document.createElement("div");
             flexContainer.classList.add("flex-container");
 
+
             data.forEach(place => {
                 const placeDiv = document.createElement("div");
                 placeDiv.classList.add("place-item");
@@ -145,14 +173,55 @@
 
                 `;
 
+                 const resultsDiv = document.getElementById('results');
+                resultsDiv.scrollIntoView({ behavior: 'smooth' });
+
+                const addButton = document.createElement("button");
+                addButton.textContent = "예약하기";
+                 addButton.addEventListener("click", () => {
+
+
+                console.log("예약하기 버튼 눌림:", place.id);
+                 const placeIdInput = document.getElementById('place_id');
+
+                    placeIdInput.value = place.id;
+                    // 이를 통해 아래에 자동으로 id값이 넣어짐
+
+
+                     placeIdInput.scrollIntoView({ behavior: 'smooth' });// 자동 스크롤
+
+    });
+
+                const placeContainer = document.createElement("div");
+                 placeContainer.classList.add("place-container");
+
 
                 flexContainer.appendChild(placeDiv);
+                placeContainer.appendChild(addButton);
+
+                flexContainer.appendChild(placeContainer);
             });
 
             resultsDiv.appendChild(flexContainer);
         })
         .catch(error => console.error("Error:", error));
+
+
+
     });
+
+
+    //--------------------------------
+
+
+
+
+
+
+
+
+
+
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -168,6 +237,8 @@
     document.getElementById('reserveForm').addEventListener('submit', function(event) {
     event.preventDefault(); // 기본 폼 제출 동작을 막습니다.
 
+
+
     const formData = new FormData(event.target);
     const jsonData = JSON.stringify({
         user_name: formData.get("user_name"),
@@ -177,7 +248,7 @@
         reserve_time: parseInt(formData.get("reserve_time"))
     });
 
-    fetch("/check-reserve", {
+    fetch("/input-reserve", {
         method: "POST",
         body: jsonData,
         headers: {
@@ -187,10 +258,25 @@
     .then(response => response.json())
     .then(data => {
         const resultMessage = document.getElementById('resultMessage');
+         const user_name_input = document.getElementById('user_name');
+        const user_phone_input = document.getElementById('user_phone_number');
+        const placeIdInput = document.getElementById('place_id');
+        const dateInput = document.getElementById('date');
+        const reserveTimeSelect = document.getElementById('reserve_time');
         if (data.success) {
-            resultMessage.textContent = '예약 완료';
+            //resultMessage.textContent = '예약 완료';
+            alert('예약을 성공하였습니다.');
+
+            user_name_input.value = '';
+            user_phone_input.value = '';
+            placeIdInput.value = '';
+            dateInput.value = '';
+            reserveTimeSelect.value = '0';
+
+
         } else {
-            resultMessage.textContent = '실패';
+            // resultMessage.textContent = '중복된 예약 정보가 있습니다.';
+            alert('예약 실패 (중복된 예약 정보)');
         }
     })
     .catch(error => {
@@ -204,6 +290,78 @@
 
 
     //----------------------------------
+    // 아래는 조회 서비스 관련 js코드
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const inquireForm = document.getElementById('inquireForm');
+      const reservationResults = document.getElementById('reservationResults');
+    inquireForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // 기본 폼 제출 동작 막기
+
+        // 사용자 입력 데이터 가져오기
+        const user_name = document.getElementById('user_name_inquire').value;
+        const user_phone_number = document.getElementById('user_phone_number_inquire').value;
+
+        // JSON 데이터 생성
+        const requestData = {
+            user_name: user_name,
+            user_phone_number: user_phone_number
+        };
+
+        // 서버로 POST 요청 보내기
+        fetch("/check-reserve", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestData)
+        })
+        .then(response => response.json())
+        .then(data => {
+
+            if (Array.isArray(data) && data.length > 0) {
+                // 일치하는 예약 정보가 있는 경우
+                reservationResults.innerHTML = ''; // 이전 내용 초기화
+
+                data.forEach(user => {
+                    // 예약 정보를 화면에 추가
+
+                    const userInfo = document.createElement('p');
+                    userInfo.textContent = `예약자 이름: ${user.user_name}, 전화번호: ${user.user_phone_number}, 장소 ID: ${user.place_id}, 날짜: ${user.date}, 시간: ${user.reserve_time === 0 ?'정규시간 (09시 ~ 18시)':'이외시간 (18시 ~ 08시)'}`
+                    reservationResults.appendChild(userInfo);
+                });
+            } else {
+                // 일치하는 예약 정보가 없는 경우
+                reservationResults.innerHTML = '일치하는 예약 정보가 없습니다.';
+            }
+
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    });
+    const dateInput = document.getElementById('date');
+    dateInput.min = getFormattedMinDate();
+    // 위치 중요하다. 여기에해야 페이지가 로드되자마자 달력 선택이 비활성화 된다.
+});
+
+
+
+ function getFormattedMinDate() {
+    const now = new Date();
+    const minDate = new Date(now);
+    minDate.setDate(minDate.getDate() + 1); // 오늘 이후의 날짜로 설정
+
+    const year = minDate.getFullYear();
+    const month = String(minDate.getMonth() + 1).padStart(2, '0');
+    const day = String(minDate.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+}
+
+
+    // -----------------------------
 
 
     var container = document.getElementById('map');

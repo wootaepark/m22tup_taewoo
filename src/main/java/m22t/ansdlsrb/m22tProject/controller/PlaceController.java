@@ -2,15 +2,17 @@ package m22t.ansdlsrb.m22tProject.controller;
 
 import m22t.ansdlsrb.m22tProject.data.dto.FrontendDto;
 import m22t.ansdlsrb.m22tProject.data.dto.PlaceDto;
+import m22t.ansdlsrb.m22tProject.data.entity.PlaceEntity;
 import m22t.ansdlsrb.m22tProject.service.PlaceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping()
+@RequestMapping("/")
 public class PlaceController {
     private final PlaceService placeService;
 

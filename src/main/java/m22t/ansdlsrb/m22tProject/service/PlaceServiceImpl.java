@@ -4,16 +4,19 @@ import m22t.ansdlsrb.m22tProject.data.dao.PlaceDao;
 import m22t.ansdlsrb.m22tProject.data.dto.FrontendDto;
 import m22t.ansdlsrb.m22tProject.data.dto.PlaceDto;
 import m22t.ansdlsrb.m22tProject.data.entity.PlaceEntity;
+import m22t.ansdlsrb.m22tProject.data.repository.PlaceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlaceServiceImpl implements PlaceService{
 
     PlaceDao placeDao;
+    private PlaceRepository placeRepository;
     @Autowired
     public PlaceServiceImpl(PlaceDao placeDao){
         this.placeDao = placeDao;
@@ -46,4 +49,8 @@ public class PlaceServiceImpl implements PlaceService{
         }
         return placeDtos;
     }
+
+
+
+
 }
