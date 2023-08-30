@@ -155,6 +155,6 @@ fabric.properties
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij
 
-.resources/application.properties
+src/main/resources/application.properties
 
 
