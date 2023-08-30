@@ -53,6 +53,7 @@
 
 <div id="map-container" style="display: flex; justify-content: center; align-items: center; width: 100%;">
     <div id="map" style="width: 500px; height: 400px;"></div>
+
 </div>
 <br>
 <hr>
@@ -81,6 +82,7 @@
 
         <label for="place_id">예약 장소 ID:</label>
         <input type="number" id="place_id" name="place_id" required><br><br>
+
 
         <label for="date">예약 날짜:</label>
         <input type="date" id="date" name="date" required><br><br>
@@ -167,9 +169,6 @@
                     <p>Road Address: ${place.roadAddress}</p>
                     <p>Phone: ${place.phone}</p>
                     <p>URL: <a href="https://${place.url}" target="_blank">${place.url}</a></p>
-                    <p>X: ${place.x}</p>
-                    <p>Y: ${place.y}</p>
-                    <p>Image URL: ${place.imgUrl}</p>
 
                 `;
 
@@ -184,7 +183,10 @@
                 console.log("예약하기 버튼 눌림:", place.id);
                  const placeIdInput = document.getElementById('place_id');
 
-                    placeIdInput.value = place.id;
+                 placeIdInput.value = place.id;
+
+
+
                     // 이를 통해 아래에 자동으로 id값이 넣어짐
 
 
@@ -245,7 +247,9 @@
         user_phone_number: formData.get("user_phone_number"),
         place_id: parseInt(formData.get("place_id")),
         date: formData.get("date"),
-        reserve_time: parseInt(formData.get("reserve_time"))
+        reserve_time: parseInt(formData.get("reserve_time")),
+        placeEntity: {
+        id: parseInt(formData.get("place_id"))}
     });
 
     fetch("/input-reserve", {
@@ -260,9 +264,18 @@
         const resultMessage = document.getElementById('resultMessage');
          const user_name_input = document.getElementById('user_name');
         const user_phone_input = document.getElementById('user_phone_number');
-        const placeIdInput = document.getElementById('place_id');
         const dateInput = document.getElementById('date');
         const reserveTimeSelect = document.getElementById('reserve_time');
+
+
+
+        const placeIdInput = document.getElementById('place_id');
+        const placeCodeInput = document.getElementById('place_id');
+        placeIdInput.addEventListener("input", () => {
+
+        placeEntityInput.value = placeIdInput.value;
+    });
+
         if (data.success) {
             //resultMessage.textContent = '예약 완료';
             alert('예약을 성공하였습니다.');
@@ -328,7 +341,7 @@
                     // 예약 정보를 화면에 추가
 
                     const userInfo = document.createElement('p');
-                    userInfo.textContent = `예약자 이름: ${user.user_name}, 전화번호: ${user.user_phone_number}, 장소 ID: ${user.place_id}, 날짜: ${user.date}, 시간: ${user.reserve_time === 0 ?'정규시간 (09시 ~ 18시)':'이외시간 (18시 ~ 08시)'}`
+                    userInfo.textContent = `예약자 이름: ${user.user_name}, 전화번호: ${user.user_phone_number}, 장소 : ${user.placeEntity.name}, 날짜: ${user.date}, 시간: ${user.reserve_time === 0 ?'정규시간 (09시 ~ 18시)':'이외시간 (18시 ~ 08시)'}`
                     reservationResults.appendChild(userInfo);
                 });
             } else {
@@ -379,6 +392,9 @@ var userlongitude = 127.29419662868723; // 사용자의 경도 데이터
 // 마커 클릭 시 인포윈도우 표시
 var infowindow = new kakao.maps.InfoWindow({});
 
+var latitudeInput = document.getElementById('y');
+var longitudeInput = document.getElementById('x');
+
 kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
   if (marker) {
     marker.setMap(null);
@@ -393,8 +409,8 @@ kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
   userlatitude = latlng.getLat(); // 클릭한 위치의 위도 저장
   userlongitude = latlng.getLng(); // 클릭한 위치의 경도 저장
 
-  infowindow.setContent('<div>마커 위치: ' + userlatitude + ', ' + userlongitude + '</div>');
-  infowindow.open(map, marker);
+
+
 
   // 여기에 userlatitude와 userlongitude를 userdata에 저장하는 로직을 추가하세요
   // 예를 들어, 사용자 정보 객체에 저장할 수 있습니다.
@@ -403,6 +419,11 @@ kakao.maps.event.addListener(map, 'click', function(mouseEvent) {
     longitude: userlongitude
   };
   console.log('사용자 정보:', userdata);
+
+  latitudeInput.value = userlatitude;
+  longitudeInput.value = userlongitude;
+
+
 });
 
 locationBtn.addEventListener('click', function() {
@@ -430,6 +451,14 @@ locationBtn.addEventListener('click', function() {
   });
 
 
+  // 클릭 이벤트 핸들러 내부에 위치 정보 업데이트 로직 추가
+
+
+
+
+
+
+
   // 카카오맵 장소 검색 기능 활용
   var geocoder = new kakao.maps.services.Geocoder();
   geocoder.addressSearch(selectedLocation, function(result, status) {
@@ -449,9 +478,7 @@ locationBtn.addEventListener('click', function() {
         map: map
       });
 
-      kakao.maps.event.addListener(marker, 'click', function() {
-        infowindow.open(map, marker);
-      });
+
     } else {
       alert('장소를 찾을 수 없습니다.');
     }

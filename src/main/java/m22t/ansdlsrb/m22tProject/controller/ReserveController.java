@@ -43,6 +43,7 @@ public class ReserveController {
                 user.setPlace_id(userInputDto.getPlace_id());
                 user.setDate(userInputDto.getDate());
                 user.setReserve_time(userInputDto.getReserve_time());
+                user.setPlaceEntity(userInputDto.getPlaceEntity());
 
                 reservationRepository.save(user);
 
@@ -57,7 +58,7 @@ public class ReserveController {
         }
     }
 
-    @PostMapping("/check-reserve") // 받아들여온 dto를 비교하여 알맞은 일정 리스트 반환
+    @PostMapping("/check-reserve")
     public ResponseEntity<?> checkReservation(@RequestBody UserCheckDto userCheckDto) {
         try {
             List<UserEntity> matchingUser = userReservationService.findMatchingUsers(userCheckDto);
@@ -72,6 +73,8 @@ public class ReserveController {
                     .body("An error occurred while processing the request.");
         }
     }
+
+
 
 
 
