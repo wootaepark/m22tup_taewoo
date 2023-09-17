@@ -237,7 +237,7 @@
 
 
     document.getElementById('reserveForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // 기본 폼 제출 동작을 막습니다.
+    event.preventDefault(); // 기본 폼 제출 동작을 막습니다. (예약 과정)
 
 
 
@@ -249,7 +249,7 @@
         date: formData.get("date"),
         reserve_time: parseInt(formData.get("reserve_time")),
         placeEntity: {
-        id: parseInt(formData.get("place_id"))}
+        id: parseInt(formData.get("place_id"))} // 여기 존재하는 외래키에 id 값 저장
     });
 
     fetch("/input-reserve", {

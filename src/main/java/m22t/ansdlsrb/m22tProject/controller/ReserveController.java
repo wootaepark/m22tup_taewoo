@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
 public class ReserveController {
 
     private final ReservationRepository reservationRepository;
