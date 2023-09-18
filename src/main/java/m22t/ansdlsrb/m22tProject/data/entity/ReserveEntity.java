@@ -6,10 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name="User_table")
+@Table(name="Reserve_table")
 @Getter
 @Setter
-public class UserEntity {
+public class ReserveEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,10 +32,10 @@ public class UserEntity {
         this.placeEntity = placeEntity;
     }
 
-    public UserEntity() {
+    public ReserveEntity() {
     }
 
-    public UserEntity(Long id, String user_name, String user_phone_number, Long place_id, String date, Integer reserve_time, PlaceEntity placeEntity) {
+    public ReserveEntity(Long id, String user_name, String user_phone_number, Long place_id, String date, Integer reserve_time, PlaceEntity placeEntity) {
         this.id = id;
         this.user_name = user_name;
         this.user_phone_number = user_phone_number;

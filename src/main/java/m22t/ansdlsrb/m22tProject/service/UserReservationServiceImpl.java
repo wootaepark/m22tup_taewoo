@@ -2,7 +2,7 @@ package m22t.ansdlsrb.m22tProject.service;
 
 import m22t.ansdlsrb.m22tProject.data.dto.UserCheckDto;
 import m22t.ansdlsrb.m22tProject.data.dto.UserInputDto;
-import m22t.ansdlsrb.m22tProject.data.entity.UserEntity;
+import m22t.ansdlsrb.m22tProject.data.entity.ReserveEntity;
 import m22t.ansdlsrb.m22tProject.data.repository.ReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,10 @@ public class UserReservationServiceImpl implements UserReservationService {
 
     @Override
     public boolean is_valid(UserInputDto userInputDto) {
-        List<UserEntity> entityList = new ArrayList<>();
+        List<ReserveEntity> entityList = new ArrayList<>();
         reservationRepository.findAll().forEach(entityList::add);
 
-        for (UserEntity entity : entityList) {
+        for (ReserveEntity entity : entityList) {
             if (isMatching(entity, userInputDto)) {
                 return false; // 일치하는 순간 false 반환
             }
@@ -31,7 +31,7 @@ public class UserReservationServiceImpl implements UserReservationService {
 
     }
 
-    private boolean isMatching(UserEntity entity, UserInputDto userInputDto) {
+    private boolean isMatching(ReserveEntity entity, UserInputDto userInputDto) {
         return entity.getPlace_id().equals(userInputDto.getPlace_id()) &&
                 entity.getDate().equals(userInputDto.getDate()) &&
                 entity.getReserve_time().equals(userInputDto.getReserve_time());
@@ -39,16 +39,16 @@ public class UserReservationServiceImpl implements UserReservationService {
 
 
     @Override
-    public List<UserEntity> findMatchingUsers(UserCheckDto userCheckDto) {
+    public List<ReserveEntity> findMatchingUsers(UserCheckDto userCheckDto) {
 
-        List<UserEntity> matchingUsers = new ArrayList<>();
+        List<ReserveEntity> matchingUsers = new ArrayList<>();
 
-        List<UserEntity> entityList = new ArrayList<>();
+        List<ReserveEntity> entityList = new ArrayList<>();
         reservationRepository.findAll().forEach(entityList::add);
 
 
 
-        for (UserEntity entity : entityList) {
+        for (ReserveEntity entity : entityList) {
             if (isMatching(entity, userCheckDto)) {
                 matchingUsers.add(entity);
             }
@@ -57,7 +57,7 @@ public class UserReservationServiceImpl implements UserReservationService {
         return matchingUsers;
     }
 
-    private boolean isMatching(UserEntity entity, UserCheckDto userCheckDto) {
+    private boolean isMatching(ReserveEntity entity, UserCheckDto userCheckDto) {
         return entity.getUser_name().equals(userCheckDto.getUser_name()) &&
                 entity.getUser_phone_number().equals(userCheckDto.getUser_phone_number());
     }

@@ -3,7 +3,8 @@ package m22t.ansdlsrb.m22tProject.controller;
 import m22t.ansdlsrb.m22tProject.data.dto.UserCheckDto;
 import m22t.ansdlsrb.m22tProject.data.dto.UserInputDto;
 import m22t.ansdlsrb.m22tProject.data.entity.PlaceEntity;
-import m22t.ansdlsrb.m22tProject.data.entity.UserEntity;
+import m22t.ansdlsrb.m22tProject.data.entity.ReserveEntity;
+
 import m22t.ansdlsrb.m22tProject.data.repository.ReservationRepository;
 import m22t.ansdlsrb.m22tProject.service.PlaceService;
 import m22t.ansdlsrb.m22tProject.service.UserReservationService;
@@ -36,7 +37,7 @@ public class ReserveController {
         try {
             if (userReservationService.is_valid(userInputDto)) {
                 // DTO 객체로부터 예약 정보를 추출하여 DB에 저장
-                UserEntity user = new UserEntity();
+                ReserveEntity user = new ReserveEntity();
                 user.setUser_name(userInputDto.getUser_name());
                 user.setUser_phone_number(userInputDto.getUser_phone_number());
                 user.setPlace_id(userInputDto.getPlace_id());
@@ -60,7 +61,7 @@ public class ReserveController {
     @PostMapping("/check-reserve")
     public ResponseEntity<?> checkReservation(@RequestBody UserCheckDto userCheckDto) {
         try {
-            List<UserEntity> matchingUser = userReservationService.findMatchingUsers(userCheckDto);
+            List<ReserveEntity> matchingUser = userReservationService.findMatchingUsers(userCheckDto);
 
             if (matchingUser != null) {
                 return ResponseEntity.ok().body(matchingUser);
