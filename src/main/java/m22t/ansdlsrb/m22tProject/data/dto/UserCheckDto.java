@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserCheckDto { // 유저 조회 dto
+public class UserCheckDto { // 예약 정보 조회 dto 추후 수정 필요
     private String user_name;
     private String user_phone_number;
 }

@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
     <style>
         /* .flex-container 클래스에 추가한 스타일 */
         .flex-container {
@@ -21,11 +23,25 @@
     </style>
 
     <title>M22T UP</title>
+
+
 </head>
 <body>
 <div style="text-align:center; margin-bottom:20px;">
     <font color="orange" size="50px">M22T UP</font>
-<h3>지도에 마크를 찍고 좌표를 입력하세요!!!</h3>
+
+
+    <div id="loginStatus"></div>
+    <button type="button" class = "btn btn-primary" id="actionButton" onclick="location.href='/login'">로그인</button>
+    <button id="myButton" class = "btn btn-secondary" onclick="changeButtonText()"></button>
+
+
+
+
+
+
+
+    <h3>지도에 마크를 찍고 좌표를 입력하세요!!!</h3>
 
     <form id="searchForm">
         <label for="type">Type:</label>
@@ -122,8 +138,10 @@
 
 </div>
 
+
 <script type="text/javascript"
         src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=d7be0dab6870b8fb60794854999fc401"></script>
+
 <script>
 
 
@@ -486,5 +504,7 @@ locationBtn.addEventListener('click', function() {
 });
 
 </script>
+
+
 </body>
 </html>
